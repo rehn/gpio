@@ -78,7 +78,7 @@ func (l *Lcd) startLcdWorker() {
 		w := <-l.queue
 		for _, k := range w {
 			if k.DataMode {
-				l.Rs.setHigh()
+				l.Rs.SetHigh()
 			}
 			for _, c := range k.Data {
 				l.writeByte(c)
@@ -143,7 +143,7 @@ func (l *Lcd) dispose() {
 }
 
 func (l *Lcd) enable() {
-	l.En.setHigh()
+	l.En.SetHigh()
 
 	l.En.setLow()
 }
@@ -202,11 +202,6 @@ func (l *Lcd) writeByte(ch byte) {
 func (l *Lcd) writeString(text string) {
 
 	l.queue <- []LcdData{LcdData{DataMode: true, Data: []byte(text)}}
-	// l.Rs.setHigh()
-	// for _, c := range text {
-	// 	l.writeByte(byte(c))
-	// }
-	// l.Rs.setLow()
 }
 
 // Clear screen

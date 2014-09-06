@@ -47,21 +47,21 @@ func (g *Gpio) cleanup() {
 	}
 }
 
-func (g *Gpio) setHigh() {
+func (g *Gpio) SetHigh() {
 	g.value = "1"
 	setValue(g)
 }
 
 func (g *Gpio) setValue(val bool) {
 	if val {
-		g.setHigh()
+		g.SetHigh()
 	} else {
 		g.setLow()
 	}
 }
 func (g *Gpio) toggleValue() {
 	if g.value == "0" {
-		g.setHigh()
+		g.SetHigh()
 	} else {
 		g.setLow()
 	}
