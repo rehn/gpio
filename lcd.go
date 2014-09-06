@@ -51,17 +51,17 @@ type Lcd struct {
 
 func newLcd(en int, rw int, rs int, D0 int, D1 int, D2 int, D3 int, D4 int, D5 int, D6 int, D7 int, height int, width int) Lcd {
 	var lcd Lcd
-	lcd.En = newGpio("out", en)
-	lcd.Rw = newGpio("out", rw)
-	lcd.Rs = newGpio("out", rs)
-	lcd.D0 = newGpio("out", D0)
-	lcd.D1 = newGpio("out", D1)
-	lcd.D2 = newGpio("out", D2)
-	lcd.D3 = newGpio("out", D3)
-	lcd.D4 = newGpio("out", D4)
-	lcd.D5 = newGpio("out", D5)
-	lcd.D6 = newGpio("out", D6)
-	lcd.D7 = newGpio("out", D7)
+	lcd.En = NewGpio("out", en)
+	lcd.Rw = NewGpio("out", rw)
+	lcd.Rs = NewGpio("out", rs)
+	lcd.D0 = NewGpio("out", D0)
+	lcd.D1 = NewGpio("out", D1)
+	lcd.D2 = NewGpio("out", D2)
+	lcd.D3 = NewGpio("out", D3)
+	lcd.D4 = NewGpio("out", D4)
+	lcd.D5 = NewGpio("out", D5)
+	lcd.D6 = NewGpio("out", D6)
+	lcd.D7 = NewGpio("out", D7)
 	lcd.height = height
 	lcd.width = width
 	lcd.sections = make(map[string]Section)

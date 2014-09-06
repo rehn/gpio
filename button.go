@@ -10,7 +10,7 @@ type Button struct {
 }
 
 func NewButton(gpioPin int, repeatIterval int64, repeatAcc int64, repeatStartAcc int64) Button {
-	g := newGpio("in", gpioPin)
+	g := NewGpio("in", gpioPin)
 	btn := Button{gpio: g, repeatInterval: repeatIterval, buttonDown: make(chan bool), buttonUp: make(chan bool)}
 	go btn.buttonWatcher()
 	return btn
