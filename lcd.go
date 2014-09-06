@@ -84,7 +84,7 @@ func (l *Lcd) startLcdWorker() {
 				l.writeByte(c)
 			}
 			if k.DataMode {
-				l.Rs.setLow()
+				l.Rs.SetLow()
 			}
 
 		}
@@ -95,7 +95,7 @@ func (l *Lcd) startLcdWorker() {
 // set pins and start lcd writer
 func (l *Lcd) initialize() {
 
-	l.Rs.setLow()
+	l.Rs.SetLow()
 	l.writeCommandByte8(0x30)
 	l.writeCommandByte8(0x30)
 	l.writeCommandByte8(0x20)
@@ -129,23 +129,23 @@ func (s *Section) writeString(value string) {
 
 // clear all pins used by Lcd
 func (l *Lcd) dispose() {
-	l.Rs.cleanup()
-	l.Rw.cleanup()
-	l.En.cleanup()
-	l.D0.cleanup()
-	l.D1.cleanup()
-	l.D2.cleanup()
-	l.D3.cleanup()
-	l.D4.cleanup()
-	l.D5.cleanup()
-	l.D6.cleanup()
-	l.D7.cleanup()
+	l.Rs.Cleanup()
+	l.Rw.Cleanup()
+	l.En.Cleanup()
+	l.D0.Cleanup()
+	l.D1.Cleanup()
+	l.D2.Cleanup()
+	l.D3.Cleanup()
+	l.D4.Cleanup()
+	l.D5.Cleanup()
+	l.D6.Cleanup()
+	l.D7.Cleanup()
 }
 
 func (l *Lcd) enable() {
 	l.En.SetHigh()
 
-	l.En.setLow()
+	l.En.SetLow()
 }
 
 // timing method
@@ -165,11 +165,11 @@ func (l *Lcd) SetPosition(line int, position int) {
 
 // write string to lcd
 func (l *Lcd) writeCommandByte8(ch byte) {
-	l.Rs.setLow()
-	l.D4.setLow()
-	l.D5.setLow()
-	l.D6.setLow()
-	l.D7.setLow()
+	l.Rs.SetLow()
+	l.D4.SetLow()
+	l.D5.SetLow()
+	l.D6.SetLow()
+	l.D7.SetLow()
 	bitArr := byteToBitArray(ch)
 	l.writeBits(bitArr, HIGH_BITS)
 	l.enable()
@@ -180,17 +180,17 @@ func (l *Lcd) writeBits(bits [8]uint, row int) {
 	dList := []Gpio{l.D4, l.D5, l.D6, l.D7}
 	for i := 0; i < 4; i++ {
 		b := (int(bits[startBit+i]) > 0)
-		dList[i].setValue(b)
+		dList[i].SetValue(b)
 	}
 }
 
 // write string to lcd
 func (l *Lcd) writeByte(ch byte) {
 	bitArr := byteToBitArray(ch)
-	l.D4.setLow()
-	l.D5.setLow()
-	l.D6.setLow()
-	l.D7.setLow()
+	l.D4.SetLow()
+	l.D5.SetLow()
+	l.D6.SetLow()
+	l.D7.SetLow()
 	l.writeBits(bitArr, HIGH_BITS)
 	l.enable()
 	l.writeBits(bitArr, LOW_BITS)

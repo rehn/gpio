@@ -3,30 +3,30 @@ package gpio
 import "time"
 
 type Button struct {
-	gpio           Gpio
-	buttonDown     chan bool
-	buttonUp       chan bool
-	repeatInterval int64
+	Gp             Gpio
+	ButtonDown     chan bool
+	ButtonUp       chan bool
+	RepeatInterval int64
 }
 
 func NewButton(gpioPin int, repeatIterval int64, repeatAcc int64, repeatStartAcc int64) Button {
 	g := NewGpio("in", gpioPin)
-	btn := Button{gpio: g, repeatInterval: repeatIterval, buttonDown: make(chan bool), buttonUp: make(chan bool)}
+	btn := Button{Gp: g, RepeatInterval: repeatIterval, ButtonDown: make(chan bool), ButtonUp: make(chan bool)}
 	go btn.buttonWatcher()
 	return btn
 }
 
 func (b *Button) buttonWatcher() {
-	currentValue := b.gpio.getValue()
+	currentValue := b.Gp.GetValue()
 	for {
-		newValue := b.gpio.getValue()
+		newValue := b.Gp.GetValue()
 		if currentValue != newValue || newValue == true {
 			if newValue == true {
-				b.buttonDown <- true
-				var d time.Duration = time.Duration(time.Duration(b.repeatInterval-10) * time.Millisecond)
+				b.ButtonDown <- true
+				var d time.Duration = time.Duration(time.Duration(b.RepeatInterval-10) * time.Millisecond)
 				time.Sleep(d)
 			} else {
-				b.buttonUp <- false
+				b.ButtonUp <- false
 			}
 			currentValue = newValue
 		}

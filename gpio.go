@@ -16,77 +16,77 @@ var PATH string = "/sys/class/gpio" // Raspberry pi
 type Gpio struct {
 	Direction string
 	Pin       int
-	value     string
-	enabled   bool
+	Value     string
+	Enabled   bool
 }
 
 func NewGpio(direction string, pin int) Gpio {
 	var g Gpio
 	g.Direction = direction
 	g.Pin = pin
-	g.enabled = false
+	g.Enabled = false
 	if pin > 0 {
-		g.initialize()
+		g.Initialize()
 		time.Sleep(400 * time.Millisecond)
 	}
 	return g
 }
 
-func (g *Gpio) initialize() {
+func (g *Gpio) Initialize() {
 	if g.Pin > 0 {
-		g.enabled = export(g)
-		if g.enabled == true {
-			g.enabled = writeDirection(g)
+		g.Enabled = export(g)
+		if g.Enabled == true {
+			g.Enabled = writeDirection(g)
 		}
 	}
 }
 
-func (g *Gpio) cleanup() {
+func (g *Gpio) Cleanup() {
 	if g.Pin > 0 {
 		unexport(g)
 	}
 }
 
 func (g *Gpio) SetHigh() {
-	g.value = "1"
+	g.Value = "1"
 	setValue(g)
 }
 
-func (g *Gpio) setValue(val bool) {
+func (g *Gpio) SetValue(val bool) {
 	if val {
 		g.SetHigh()
 	} else {
-		g.setLow()
+		g.SetLow()
 	}
 }
-func (g *Gpio) toggleValue() {
-	if g.value == "0" {
+func (g *Gpio) ToggleValue() {
+	if g.Value == "0" {
 		g.SetHigh()
 	} else {
-		g.setLow()
+		g.SetLow()
 	}
 }
 
-func (g *Gpio) getValue() bool {
+func (g *Gpio) GetValue() bool {
 	sPin := strconv.Itoa(g.Pin)
 	b, err := ioutil.ReadFile(PATH + "/gpio" + sPin + "/value")
 
 	if err != nil {
 		log.Print(err.Error())
-		return g.value == "1"
+		return g.Value == "1"
 	}
 	if b[0] == 48 {
-		g.value = "0"
+		g.Value = "0"
 		return false
 	} else {
-		g.value = "1"
+		g.Value = "1"
 		return true
 	}
 
 }
 
-func (g *Gpio) setLow() {
-	g.value = "0"
+func (g *Gpio) SetLow() {
+	g.Value = "0"
 	setValue(g)
 }
 
@@ -112,7 +112,7 @@ func unexport(g *Gpio) {
 func setValue(g *Gpio) {
 	if g.Pin > 0 {
 		sPin := strconv.Itoa(g.Pin)
-		err := ioutil.WriteFile(PATH+"/gpio"+sPin+"/value", []byte(g.value), 0770)
+		err := ioutil.WriteFile(PATH+"/gpio"+sPin+"/value", []byte(g.Value), 0770)
 		if err != nil {
 			log.Print(err.Error())
 		}
