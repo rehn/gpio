@@ -55,7 +55,7 @@ Short Examples
   lcd.Clear()
   g.Cleanup()
   lcd.Dispose()
-}
+
 
 
 
@@ -67,7 +67,6 @@ func handleKeypress(b *gpio.Button) {
       log.Print("Button Pressed")
     case <-b.ButtonUp:
       log.Print("Button Released")
-
-    }
   }
 }
+ 
