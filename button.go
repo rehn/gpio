@@ -18,7 +18,6 @@ func NewButton(gpioPin int, repeatIterval int64, repeatAcc int64, repeatStartAcc
 
 func (b *Button) buttonWatcher() {
 	currentValue := b.gpio.getValue()
-	var currentPressedTime int64 = 0
 	for {
 		newValue := b.gpio.getValue()
 		if currentValue != newValue || newValue == true {
