@@ -1,4 +1,4 @@
-go-gpio
+gpio
 =======
 
 Userfriendly package to use gpio-pins in golangfor your raspberry pi
@@ -20,34 +20,30 @@ Goal.
 
 
 
-Examples
+Short Examples
 =======
 
-package main
-
-import (
-  "log"
-  "time"
-
-  "github.com/rehn/gpio"
-)
-
-func main() { 
+ #Regular Gpio - Blink led 1 time
   g := gpio.NewGpio("out", 4)params out/in, num of gpio 
   g.SetHigh()
-  time.Sleep(2 * time.Second)
+  time.Sleep(1 * time.Second)
   g.SetLow()
 
-
-  //New lcd parameters ( en int, rw int, rs int, D0 int, D1 int, D2 int, D3 int, D4 int, D5 int, D6 int, D7 int, height int, width int )
-  lcd := gpio.NewLcd(8, 0, 7, 0, 0, 0, 0, 25, 24, 23, 18, 2, 16) //skip D0 to D3 for now only using 4 bits 
+#Lcd
+ #New lcd parameters ( en int, rw int, rs int, D0 int, D1 int, D2 int, D3 int, D4 int, D5 int, D6 int, D7 int, height int, width int )
+  
+ #skip D0 to D3 for now only using 4 bits
+  
+  lcd := gpio.NewLcd(8, 0, 7, 0, 0, 0, 0, 25, 24, 23, 18, 2, 16)  
   lcd.WriteString("Hello World")
   
-  // section of lcd
+  # section of lcd
   s := lcd.NewSection("clock", 2, 11, 5)//parameters name,line,position,length
   s.WriteString("00:00:00")
 
-  // button
+
+
+  #button
   btn := gpio.NewButton(17, 200)
   go handleKeypress(&btn)
   
