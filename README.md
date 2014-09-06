@@ -22,3 +22,56 @@ Goal.
 
 Examples
 =======
+
+package main
+
+import (
+  "log"
+  "time"
+
+  "github.com/rehn/gpio"
+)
+
+func main() { 
+  g := gpio.NewGpio("out", 4)params out/in, num of gpio 
+  g.SetHigh()
+  time.Sleep(2 * time.Second)
+  g.SetLow()
+
+
+  //New lcd parameters ( en int, rw int, rs int, D0 int, D1 int, D2 int, D3 int, D4 int, D5 int, D6 int, D7 int, height int, width int )
+  lcd := gpio.NewLcd(8, 0, 7, 0, 0, 0, 0, 25, 24, 23, 18, 2, 16) //skip D0 to D3 for now only using 4 bits 
+  lcd.WriteString("Hello World")
+  
+  // section of lcd
+  s := lcd.NewSection("clock", 2, 11, 5)//parameters name,line,position,length
+  s.WriteString("00:00:00")
+
+  // button
+  btn := gpio.NewButton(17, 200)
+  go handleKeypress(&btn)
+  
+
+
+
+
+  time.Sleep(20 * time.Second)
+  lcd.Clear()
+  g.Cleanup()
+  lcd.Dispose()
+}
+
+
+
+
+func handleKeypress(b *gpio.Button) {
+  for {
+    select {
+    case <-b.ButtonDown:
+      log.Print("Button Pressed")
+    case <-b.ButtonUp:
+      log.Print("Button Released")
+
+    }
+  }
+}

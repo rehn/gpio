@@ -49,7 +49,7 @@ type Lcd struct {
 	queue    chan []LcdData
 }
 
-func newLcd(en int, rw int, rs int, D0 int, D1 int, D2 int, D3 int, D4 int, D5 int, D6 int, D7 int, height int, width int) Lcd {
+func NewLcd(en int, rw int, rs int, D0 int, D1 int, D2 int, D3 int, D4 int, D5 int, D6 int, D7 int, height int, width int) Lcd {
 	var lcd Lcd
 	lcd.En = NewGpio("out", en)
 	lcd.Rw = NewGpio("out", rw)
@@ -105,17 +105,17 @@ func (l *Lcd) initialize() {
 	log.Print("initialize Complete")
 }
 
-func (l *Lcd) newSection(name string, line int, position int, width int) Section {
+func (l *Lcd) NewSection(name string, line int, position int, width int) Section {
 	b := byte(linestart[line-1] + position)
 	l.sections[name] = Section{lcd: l, line: line, position: position, width: width, lcdPos: b}
 
 	return l.sections[name]
 }
-func (l *Lcd) getSection(name string) Section {
+func (l *Lcd) GetSection(name string) Section {
 	return l.sections[name]
 }
 
-func (s *Section) writeString(value string) {
+func (s *Section) WriteString(value string) {
 
 	s.value = value
 	if len(value) > s.width {
@@ -128,7 +128,7 @@ func (s *Section) writeString(value string) {
 }
 
 // clear all pins used by Lcd
-func (l *Lcd) dispose() {
+func (l *Lcd) Dispose() {
 	l.Rs.Cleanup()
 	l.Rw.Cleanup()
 	l.En.Cleanup()
@@ -199,14 +199,15 @@ func (l *Lcd) writeByte(ch byte) {
 }
 
 // write string to lcd
-func (l *Lcd) writeString(text string) {
+func (l *Lcd) WriteString(text string) {
 
 	l.queue <- []LcdData{LcdData{DataMode: true, Data: []byte(text)}}
 }
 
 // Clear screen
-func (l *Lcd) clear() {
+func (l *Lcd) Clear() {
 	l.queue <- []LcdData{LcdData{DataMode: false, Data: []byte{0x01}}}
+	time.Sleep(500 * time.Millisecond)
 }
 
 func byteToBitArray(b byte) [8]uint {

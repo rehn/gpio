@@ -3,6 +3,7 @@ package gpio
 import (
 	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 	"time"
 )
@@ -92,10 +93,12 @@ func (g *Gpio) SetLow() {
 
 func export(g *Gpio) bool {
 	sPin := strconv.Itoa(g.Pin)
-	err := ioutil.WriteFile(PATH+"/export", []byte(sPin), 0770)
-	if err != nil {
-		log.Print(err.Error())
-		return false
+	if _, err := os.Stat(PATH + "/gpio" + sPin); os.IsNotExist(err) {
+		err := ioutil.WriteFile(PATH+"/export", []byte(sPin), 0770)
+		if err != nil {
+			log.Print(err.Error())
+			return false
+		}
 	}
 	return true
 }
