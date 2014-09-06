@@ -27,7 +27,6 @@ func (b *Button) buttonWatcher() {
 				time.Sleep(d)
 			} else {
 				b.buttonUp <- false
-				currentPressedTime = 0
 			}
 			currentValue = newValue
 		}
