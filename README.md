@@ -1,72 +1,55 @@
 gpio
 =======
 
-Userfriendly package to use gpio-pins in golangfor your raspberry pi
+Userfriendly package to use gpio-pins in golang for your raspberry pi
 
-Initial version 
+Supports 
   * Generic Gpio support
-  * Simple Lcd-display ( 2 Rows x 16 chars ) my test enviroment
-
-Next version 
-  * Button structure
-  * Lcd Section 
-    Create section for part of Lcd-display for easy writing and update.
+  * Lcd-display
+  * Button
 
 
-
-
-Goal.
-  A userfriendly package for easy use of gpio-pins on your raspberry pi in golang.
-
-
-
-Short Examples
+Examples
 =======
 
- #Regular Gpio - Blink led 1 time
-  g := gpio.NewGpio("out", 4)params out/in, num of gpio 
-  g.SetHigh()
-  time.Sleep(1 * time.Second)
-  g.SetLow()
-
-#Lcd
- #New lcd parameters ( en int, rw int, rs int, D0 int, D1 int, D2 int, D3 int, D4 int, D5 int, D6 int, D7 int, height int, width int )
-  
- #skip D0 to D3 for now only using 4 bits
-  
-  lcd := gpio.NewLcd(8, 0, 7, 0, 0, 0, 0, 25, 24, 23, 18, 2, 16)  
-  lcd.WriteString("Hello World")
-  
-  # section of lcd
-  s := lcd.NewSection("clock", 2, 11, 5)//parameters name,line,position,length
-  s.WriteString("00:00:00")
+ Gpio
+      g := gpio.NewGpio("out", 4) 
+      g.SetHigh()
+      time.Sleep(1 * time.Second)
+      g.SetLow()
+      g.CleanUp()
 
 
 
-  #button
-  btn := gpio.NewButton(17, 200)
-  go handleKeypress(&btn)
-  
-
-
-
-
-  time.Sleep(20 * time.Second)
-  lcd.Clear()
-  g.Cleanup()
-  lcd.Dispose()
-
-
-
-
-
-func handleKeypress(b *gpio.Button) {
-  for {
-    select {
-    case <-b.ButtonDown:
-      log.Print("Button Pressed")
-    case <-b.ButtonUp:
-      log.Print("Button Released")
-  }
-}
+ Lcd
  
+      NewLcd(en,rs,rw,D0,D1,D2,D3,D4,D5,D6,D7,height,width)
+      
+      skip D0 to D3 for now only using 4 bits
+
+      lcd := gpio.NewLcd(8, 0, 7, 0, 0, 0, 0, 25, 24, 23, 18, 2, 16)  
+  
+      lcd.WriteString("Hello World")
+  
+      //lcd.NewSection(name string,line int,position int,length int)
+      lcdSection := lcd.NewSection("clock", 2, 11, 5)//parameters name,line,position,length
+      
+      lcdSection.WriteString("00:00")
+
+      lcd.Dispose()
+
+Button
+    
+    //NewButton(pin int,repeatDelay)
+    btn := gpio.NewButton(17, 200)
+    go func(b btn){
+      for {
+        select {
+          case <-b.ButtonDown:
+            log.Print("Button is pressed")
+          case <-ButtonUp:
+            log.Print("Button is released")
+        }
+      }
+    }(btn)
+
