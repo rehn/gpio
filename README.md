@@ -43,11 +43,14 @@ Button
     
     //NewButton(pin int,repeatDelay)
     btn := gpio.NewButton(17, 200)
-    btn.KeyPress = func(){
-      //onKeypress run this
-    }
-    
-    btn.KeyUp = func(){
-      //onKeyUp run this
-    }
+    go func(b btn){
+      for {
+        select {
+          case <-b.ButtonDown:
+            log.Print("Button is pressed")
+          case <-ButtonUp:
+            log.Print("Button is released")
+        }
+      }
+    }(btn)
 
