@@ -11,12 +11,12 @@ type Button struct {
 
 func NewButton(gpioPin int, repeatIterval int64) Button {
 	g := NewGpio("in", gpioPin)
-	btn := Button{gpio: g, RepeatInterval: repeatIterval, KeyPress: func() {}(), KeyUp: func() {}()}
+	btn := Button{gpio: g, RepeatInterval: repeatIterval}
 	go btn.buttonWatcher()
 	return btn
 }
 
-func (b *Button) buttonWatcher() {
+func (b Button) buttonWatcher() {
 	currentValue := b.gpio.GetValue()
 	for {
 		newValue := b.gpio.GetValue()
