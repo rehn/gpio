@@ -28,6 +28,7 @@ func (b Button) buttonWatcher() {
 				var d time.Duration = time.Duration(time.Duration(b.RepeatInterval-10) * time.Millisecond)
 				time.Sleep(d)
 			} else {
+				log.Print("ButtonUp")
 				b.ButtonUp <- true
 			}
 			currentValue = newValue
