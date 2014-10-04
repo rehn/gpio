@@ -1,6 +1,7 @@
 package gpio
 
 import "time"
+import "log"
 
 type Button struct {
 	Gp             Gpio
@@ -16,17 +17,18 @@ func NewButton(gpioPin int, repeatIterval int64) Button {
 	return btn
 }
 
-func (b *Button) buttonWatcher() {
+func (b Button) buttonWatcher() {
 	currentValue := b.Gp.GetValue()
 	for {
 		newValue := b.Gp.GetValue()
 		if currentValue != newValue || newValue == true {
 			if newValue == true {
 				b.ButtonDown <- true
+				log.Print("ButtonDown")
 				var d time.Duration = time.Duration(time.Duration(b.RepeatInterval-10) * time.Millisecond)
 				time.Sleep(d)
 			} else {
-				b.ButtonUp <- false
+				b.ButtonUp <- true
 			}
 			currentValue = newValue
 		}
