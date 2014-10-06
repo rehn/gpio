@@ -46,10 +46,12 @@ Button
     go func(b btn){
       for {
         select {
-          case <-b.ButtonDown:
-            log.Print("Button is pressed")
-          case <-ButtonUp:
-            log.Print("Button is released")
+          case state <-b.ButtonDown:
+            if state == true {
+             log.Print("Button is pressed")
+            } else {
+             log.Print("Button is released")
+            }
         }
       }
     }(btn)
